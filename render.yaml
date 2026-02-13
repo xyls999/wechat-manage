@@ -1,0 +1,31 @@
+# Render部署配置
+version: 1
+
+services:
+  - type: web
+    name: fastapi-excel-processor
+    env: python
+    disks:
+      - name: fastapi-data
+        mountPath: /var/data
+        sizeGB: 1
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        value: sqlite+aiosqlite:////var/data/app.db
+      - key: UPLOAD_DIR
+        value: /var/data/uploads
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ADMIN_AUTH_ENABLED
+        value: false
+      - key: CLEANUP_RETENTION_DAYS
+        value: 3
+      - key: CLEANUP_SCHEDULE_HOUR
+        value: 3
+      - key: CLEANUP_SCHEDULE_MINUTE
+        value: 0
+      - key: PYTHON_VERSION
+        value: 3.11.0

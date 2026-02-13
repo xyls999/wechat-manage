@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数据与机器人管理台</title>
+  <link rel="stylesheet" href="/static/admin.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <h1>数据与机器人管理台</h1>
+      <p id="sys-meta">正在加载系统信息...</p>
+    </div>
+    <a class="ghost-link" href="/docs" target="_blank" rel="noreferrer">API Docs</a>
+  </header>
+
+  <main class="layout">
+    <section class="panel banner">
+      <h2>移动端上传提示（微信）</h2>
+      <ol>
+        <li>优先在微信里选择“聊天中的文件”再上传，避免直接读取手机本地路径。</li>
+        <li>后端已支持无后缀文件与 <code>application/octet-stream</code>。</li>
+        <li>如果仍失败，请先把文件转存到“文件传输助手”后再选取上传。</li>
+      </ol>
+    </section>
+
+    <section class="panel">
+      <h2>仪表盘</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span>总用户数</span>
+          <strong id="stat-total-users">-</strong>
+        </div>
+        <div class="stat-item">
+          <span>总文件数</span>
+          <strong id="stat-total-files">-</strong>
+        </div>
+        <div class="stat-item">
+          <span>存储占用</span>
+          <strong id="stat-storage">-</strong>
+        </div>
+        <div class="stat-item">
+          <span>近7天上传</span>
+          <strong id="stat-last7days">-</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>机器人测试</h2>
+      <p class="subtle">调用 <code>/api/v1/ai/chat</code>，密钥来自服务端环境变量 <code>AI_API_KEY</code></p>
+      <div class="ai-box">
+        <textarea id="ai-prompt" placeholder="输入一句话测试机器人..."></textarea>
+        <div class="toolbar">
+          <button id="btn-ai-send">发送</button>
+        </div>
+        <pre id="ai-reply" class="reply-box">等待输入...</pre>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>用户管理</h2>
+      <div class="toolbar">
+        <input id="user-keyword" placeholder="搜索用户名/昵称">
+        <select id="user-active-filter">
+          <option value="">全部状态</option>
+          <option value="true">启用</option>
+          <option value="false">禁用</option>
+        </select>
+        <button id="btn-user-search">搜索</button>
+        <button id="btn-user-create">新增用户</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>用户名</th>
+              <th>昵称</th>
+              <th>状态</th>
+              <th>管理员</th>
+              <th>创建时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="user-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>文件管理</h2>
+      <div class="toolbar">
+        <input id="file-keyword" placeholder="搜索文件名">
+        <select id="file-type-filter">
+          <option value="">全部类型</option>
+          <option value="original">源文件</option>
+          <option value="processed">处理后文件</option>
+        </select>
+        <select id="file-status-filter">
+          <option value="">全部状态</option>
+          <option value="pending">pending</option>
+          <option value="processing">processing</option>
+          <option value="completed">completed</option>
+          <option value="failed">failed</option>
+        </select>
+        <button id="btn-file-search">搜索</button>
+        <button id="btn-file-batch-delete">批量删除</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><input type="checkbox" id="file-check-all"></th>
+              <th>ID</th>
+              <th>用户</th>
+              <th>文件名</th>
+              <th>类型</th>
+              <th>大小</th>
+              <th>状态</th>
+              <th>上传时间</th>
+              <th>备注</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="file-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>清理任务</h2>
+      <p id="cleanup-config-text">读取配置中...</p>
+      <button id="btn-run-cleanup">立即执行清理</button>
+      <p id="cleanup-result-text" class="subtle"></p>
+    </section>
+  </main>
+
+  <script src="/static/admin.js"></script>
+</body>
+</html>
